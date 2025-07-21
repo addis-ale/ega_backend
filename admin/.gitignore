@@ -1,0 +1,40 @@
+# Node modules
+node_modules/
+
+# Build output
+.next/
+out/
+
+# Production
+.env
+.env.*.local
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# IDEs & editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Test coverage
+coverage/
+
+# Optional: Turbo or Nx build cache
+turbo/
+dist/
+
+# Optional: ignore local image cache or public-generated files
+public/generated/
+public/cache/

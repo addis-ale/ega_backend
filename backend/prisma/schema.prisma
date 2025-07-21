@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  clerkUserId String    @unique
+  id          Int       @id @default(autoincrement())
+  username    String    @unique
+  email       String    @unique
+  img         String?
+  role        Role      @default(User)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  Cart        Cart?
+  Favorite    Favorite?
+}
+
+model Product {
+  id                        Int             @id @default(autoincrement())
+  productName               String
+  ProductImg                String[]
+  productType               ProductType
+  productDesc               String
+  productCategory           ProductCategory
+  productSellingPrice       Float?
+  productRentalPrice        Float?
+  productDiscountPercentage Int?
+  createdAt                 DateTime        @default(now())
+  updatedAt                 DateTime        @updatedAt
+  CartItem                  CartItem[]
+  FavoriteItem              FavoriteItem[]
+}
+
+model Cart {
+  id       Int        @id @default(autoincrement())
+  userId   Int        @unique
+  user     User       @relation(fields: [userId], references: [id])
+  CartItem CartItem[]
+}
+
+model CartItem {
+  id                 Int         @id @default(autoincrement())
+  productId          Int
+  cartId             Int
+  quantity           Int         @default(1)
+  actionType         ProductType // RENT or SELL
+  rentalDurationDays Int? // optional, for rentals only
+
+  cart    Cart    @relation(fields: [cartId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@unique([productId, cartId])
+}
+
+model Favorite {
+  id           Int            @id @default(autoincrement())
+  userId       Int            @unique
+  user         User           @relation(fields: [userId], references: [id])
+  FavoriteItem FavoriteItem[]
+}
+
+model FavoriteItem {
+  id         Int      @id @default(autoincrement())
+  productId  Int
+  favoriteId Int
+  favorite   Favorite @relation(fields: [favoriteId], references: [id])
+  product    Product  @relation(fields: [productId], references: [id])
+
+  @@unique([productId, favoriteId])
+}
+
+enum ProductType {
+  SELL
+  RENT
+  BOTH
+}
+
+enum ProductCategory {
+  PHYSICAL
+  BOARD
+  DIGITAL
+}
+
+enum Role {
+  Admin
+  User
+}
