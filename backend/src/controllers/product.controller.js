@@ -103,6 +103,39 @@ export const getProducts = async (req, res) => {
   const hasMore = limit * page < totalProduct;
   res.status(200).json({ products, totalProduct, hasMore });
 };
-export const getProduct = async (req, res) => {};
+export const getProduct = async (req, res) => {
+  const { id } = req.params;
+  const product = await prisma.product.findFirst({ where: { id } });
+  if (!product) {
+    return res.status(404).json({ message: "No Product with this ID" });
+  }
+  //TODO:update the visit number
+  // await prisma.product.update({
+  //   where: id,
+  //   data: { visit: product.visit + 1 },
+  // });
+  res.status(200).json(product);
+};
 export const updateProduct = async (req, res) => {};
-export const deleteProduct = async (req, res) => {};
+export const deleteProduct = async (req, res) => {
+  const clerkUserId = req.auth().userId;
+  if (!clerkUserId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { clerkUserId },
+  });
+  const id = parseInt(req.params.id);
+
+  if (!user || user.role !== "Admin") {
+    return res.status(403).json({ error: "Forbidden" });
+  }
+  const productToDelete = await prisma.product.findUnique({ where: { id } });
+
+  if (!productToDelete) {
+    return res.status(403).json({ message: "No product found to be deleted" });
+  }
+  await prisma.product.delete({ where: { id } });
+  return res.status(200).json({ message: "Post deleted successfully" });
+};

@@ -77,7 +77,6 @@ const CreateProductForm = () => {
   const { mutate, isPending: isMutating } = useMutation({
     mutationFn: createProduct,
     onSuccess: async (data) => {
-      console.log(data);
       await queryClient.invalidateQueries({ queryKey: ["products"] });
       productForm.reset();
       files.forEach((file) => removeFile(file.id));
