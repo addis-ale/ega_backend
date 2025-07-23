@@ -89,3 +89,8 @@ export const productSchema = z.discriminatedUnion("productType", [
   }),
 ]);
 export type productSchemaValues = z.infer<typeof productSchema>;
+export type GetProductsResponse = {
+  products: productSchemaValues[];
+  totalProduct: number;
+  hasMore: boolean;
+};
