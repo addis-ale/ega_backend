@@ -44,14 +44,15 @@ const ActionCell = ({ row }: ActionCellProps) => {
             View
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => router.push(`/products/${product.id}/edit`)}
+            onClick={() =>
+              router.push(`/dashboard/shop/update-product/${product.id}`)
+            }
           >
-            Edit
+            update
           </DropdownMenuItem>
           <DropdownMenuItem
             disabled={isPending}
             onClick={() => {
-              console.log(product.id);
               deleteProduct(product.id, {
                 onSuccess: () => toast.success("Product deleted"),
                 onError: () => toast.error("Failed to delete product"),

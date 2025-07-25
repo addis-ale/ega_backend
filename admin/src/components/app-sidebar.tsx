@@ -41,7 +41,7 @@ const items = [
       {
         title: "update Product",
         icon: Plus,
-        href: "/dashboard/shop/add-product",
+        href: "/dashboard/shop/update-product",
       },
     ],
   },
