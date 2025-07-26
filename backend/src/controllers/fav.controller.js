@@ -77,10 +77,10 @@ export const getFavorites = async (req, res) => {
   }
 
   // Fetch *all* favorite items for that favorite list
-  const favProducts = await prisma.favoriteItem.findMany({
+  const favItems = await prisma.favoriteItem.findMany({
     where: { favoriteId: myFavorite.id },
     include: { product: true },
   });
-
-  return res.status(200).json(favProducts);
+  const favoriteProducts = favItems.map((item) => item.product);
+  return res.status(200).json(favoriteProducts);
 };
