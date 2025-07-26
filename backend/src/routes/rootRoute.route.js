@@ -4,5 +4,6 @@ import uploadRoute from "./upload.route.js";
 const rootRoute = Router();
 rootRoute.use("/products", productRoute);
 rootRoute.use("/upload", uploadRoute);
+rootRoute.use("/favorite");
 
 export default rootRoute;

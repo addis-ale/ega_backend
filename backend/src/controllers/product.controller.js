@@ -1,6 +1,6 @@
 import { createProductSchema } from "../schema/productSchema.js";
 import prisma from "../lib/prismadb.js";
-import { includes, z } from "zod";
+import { z } from "zod";
 
 export const createProduct = async (req, res) => {
   try {
