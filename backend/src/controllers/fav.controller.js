@@ -52,3 +52,35 @@ export const favAddRemove = async (req, res) => {
     return res.status(200).json({ message: "Added to favorites" });
   }
 };
+export const getFavorites = async (req, res) => {
+  const clerkUserId = req.auth?.userId;
+
+  if (!clerkUserId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const user = await prisma.user.findFirst({
+    where: { clerkUserId },
+  });
+
+  if (!user) {
+    return res.status(403).json({ error: "Forbidden" });
+  }
+
+  const myFavorite = await prisma.favorite.findFirst({
+    where: { userId: user.id },
+  });
+
+  // If user has no favorite record yet, return empty list
+  if (!myFavorite) {
+    return res.status(200).json([]);
+  }
+
+  // Fetch *all* favorite items for that favorite list
+  const favProducts = await prisma.favoriteItem.findMany({
+    where: { favoriteId: myFavorite.id },
+    include: { product: true },
+  });
+
+  return res.status(200).json(favProducts);
+};
