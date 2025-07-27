@@ -5,5 +5,12 @@ const AddToCartSchema = z.object({
   actionType: z.enum(["BUY", "RENT"]),
   rentalStartDate: z.string().datetime().optional(),
   rentalEndDate: z.string().datetime().optional(),
+  priceAtTime: z.number(),
 });
-export { AddToCartSchema };
+const updateCartItemSchema = z.object({
+  quantity: z.number().min(1).optional(),
+  actionType: z.enum(["BUY", "RENT"]).optional(),
+  rentalStartDate: z.string().datetime().optional(),
+  rentalEndDate: z.string().datetime().optional(),
+});
+export { AddToCartSchema, updateCartItemSchema };
