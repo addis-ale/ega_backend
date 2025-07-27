@@ -49,8 +49,11 @@ model CartItem {
   productId          Int
   cartId             Int
   quantity           Int         @default(1)
-  actionType         ProductType // RENT or SELL
-  rentalDurationDays Int? // optional, for rentals only
+  actionType         ProductType
+  rentalStartDate    DateTime?
+  rentalEndDate      DateTime?
+  rentalDurationDays Int?
+  priceAtTime        Decimal     @db.Decimal(10, 2)
 
   cart    Cart    @relation(fields: [cartId], references: [id])
   product Product @relation(fields: [productId], references: [id])
